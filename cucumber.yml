@@ -1,0 +1,5 @@
+#default: --format html --out report.html --format pretty
+#default: --profile html_report --profile web173 --profile web13
+#html_report: --format html --out report.html --format pretty
+#web173: --name loan WEBSITE=http://192.168.0.173/login.asp
+web13: --name loan WEBSITE=http://192.168.0.13/login.asp
