@@ -33,14 +33,14 @@ end
 Then /^check the loanfile progress and download the report$/ do
 	pre = Time.now.to_i
 	hash_filepath = {
-		'cpr' => "D:\\work\\thc\\lib\\report\\#{pre}_cpr.xls",
-		'dcf' => "D:\\work\\thc\\lib\\report\\#{pre}_dcf.xls",
-		'rmpa' => "D:\\work\\thc\\lib\\report\\#{pre}_rmpa.xls"
+		'cpr' => "D:\\thc\\lib\\report\\#{pre}_cpr.xls",
+		'dcf' => "D:\\thc\\lib\\report\\#{pre}_dcf.xls",
+		'rmpa' => "D:\\thc\\lib\\report\\#{pre}_rmpa.xls"
 	}
 	$compare_filepath = {
-		'cpr' => "D:\\work\\thc\\lib\\report\\#{pre}_cpr.xls",
-		'dcf' => "D:\\work\\thc\\lib\\report\\#{pre}_dcf.xls",
-		'rmpa' => "D:\\work\\thc\\lib\\report\\#{pre}_rmpa.xls"
+		'cpr' => "D:\\thc\\lib\\report\\#{pre}_cpr.xls",
+		'dcf' => "D:\\thc\\lib\\report\\#{pre}_dcf.xls",
+		'rmpa' => "D:\\thc\\lib\\report\\#{pre}_rmpa.xls"
 	}
 	#puts "$compare_filepath:"
 	#puts $compare_filepath

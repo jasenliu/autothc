@@ -12,7 +12,7 @@ Feature: Generate loan file report
 			And setup the pricing date
 			And browse the loan file portfolio
 			|file_path                                                   |
-			|D:\\work\\thc\\lib\\data file\\excel xml\\LoanFileSample.xls|
+			|D:\\thc\\lib\\data file\\excel xml\\LoanFileSample.xls|
 		  And click the generate reports button
 		 Then the repot will displayed on the report table
 		 
