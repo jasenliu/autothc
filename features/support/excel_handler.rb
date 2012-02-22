@@ -125,9 +125,17 @@ def compare_excel_sheet(generate_excel_path, stand_excel_path, sheet_name, repor
 		diff_name = File.basename(generate_excel_path, ".xls") + "_diff.xls"
 		diff_path = File.dirname(generate_excel_path) + "\\" + diff_name
 		generate_excel_sheet.saveas(diff_path)
-		$result.store(report_name, "diff")
+		case ENV['WEBSITE']
+				when /13/ then $result_13.store(report_name, "diff")
+				when /173/ then $result_173.store(report_name, "diff")
+				else $result_thc.store(report_name, "diff")
+		end
 	else
-		$result.store(report_name, "same")
+		case ENV['WEBSITE']
+				when /13/ then $result_13.store(report_name, "same")
+				when /173/ then $result_173.store(report_name, "same")
+				else $result_thc.store(report_name, "same")
+		end
 	end
 	
 	close_excel

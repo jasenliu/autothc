@@ -31,7 +31,8 @@ Then /^the repot will displayed on the report table$/ do
 end
 
 Then /^check the loanfile progress and download the report$/ do
-	pre = Time.now.to_i
+	#pre = Time.now.to_i
+	pre = Time.now.strftime("%Y-%m-%d %H-%M")
 	hash_filepath = {
 		'cpr' => "D:\\thc\\lib\\report\\#{pre}_cpr.xls",
 		'dcf' => "D:\\thc\\lib\\report\\#{pre}_dcf.xls",
@@ -60,5 +61,14 @@ Then /^get the rmpa report data from excel and compare them$/ do
 end
 
 Given /^send the loan file result$/ do
-	send_loan_file_result
+	save_loan_file_result_to_excel
+	puts "env: " + ENV['WEBSITE']
+	puts ENV['WEBSITE'].include?('173')
+	puts "result_13:"
+	p $result_13
+	puts "result_173:"
+  p $result_173
+	if(ENV['WEBSITE'].include?('173'))
+		send_loan_file_result
+	end
 end

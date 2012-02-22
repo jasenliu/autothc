@@ -144,7 +144,7 @@ def check_loan_file_progress(hash_filepath)
 	@browser.wait
 	begin_time = Time.now.to_i
 	while(1 == 1)
-		if(Time.now.to_i - begin_time > 300)
+		if(Time.now.to_i - begin_time > 500)
 			puts 'time out'
 			break
 		end
@@ -225,22 +225,25 @@ end
 =end
 def compare_loan_file_report
 	#puts "begin to compare loan file report"
-	$result = {}
 	$compare_filepath.each do |report_name, file_path|
 		#puts "file_path:" + file_path
 		if(File.exists?(file_path))
 			#puts "compare #{report_name} loan file report..."
 			stand_excel_path = case report_name
-				when "cpr" then "D:\\work\\thc\\lib\\report\\std report\\cpr_std.xls"
-				when "dcf" then "D:\\work\\thc\\lib\\report\\std report\\dcf_std.xls"
-				else "D:\\work\\thc\\lib\\report\\std report\\rmpa_std.xls"
+				when "cpr" then "D:\\thc\\lib\\report\\std report\\cpr_std.xls"
+				when "dcf" then "D:\\thc\\lib\\report\\std report\\dcf_std.xls"
+				else "D:\\thc\\lib\\report\\std report\\rmpa_std.xls"
 			end
 			#puts "name:" + report_name
 			compare_excel_sheet(file_path, stand_excel_path, "Sheet1", report_name)
 			#puts "compare #{report_name} loan file report finished"
 		else
 			puts "#{report_name} report generate failed"
-			$result.store(report_name, "no report")
+			case ENV['WEBSITE']
+				when /13/ then $result_13.store(report_name, "no report")
+				when /173/ then $result_173.store(report_name, "no report")
+				else $result_thc.store(report_name, "no report")
+			end
 		end
 	end
 end
@@ -337,13 +340,25 @@ def get_analysis_table_data_from_excel(arr_page)
 			diff_name = File.basename($compare_filepath['rmpa'], ".xls") + "_page_diff.xls"
 			diff_path = File.dirname($compare_filepath['rmpa']) + "\\" + diff_name
 			excel.saveas(diff_path)
-			$result.store("at", "diff") #at means Analysis Table on the loan file page
+			case ENV['WEBSITE']
+				when /13/ then $result_13.store("at", "diff")
+				when /173/ then $result_173.store("at", "diff")
+				else $result_thc.store("at", "diff")
+			end #at means Analysis Table on the loan file page
 		else
-			$result.store("at", "same")
+			case ENV['WEBSITE']
+				when /13/ then $result_13.store("at", "same")
+				when /173/ then $result_173.store("at", "same")
+				else $result_thc.store("at", "same")
+			end
 		end
 	else
 		puts "rmpa report do not exists"
-		$result.store("at", "no report")
+		case ENV['WEBSITE']
+				when /13/ then $result_13.store("at", "no report")
+				when /173/ then $result_173.store("at", "no report")
+				else $result_thc.store("at", "no report")
+		end
 	end
 	close_excel
 end
@@ -362,11 +377,19 @@ end
 **************************************************************************************
 =end
 def send_loan_file_result
-	$result.each do |name, result|
+	$result_13.each do |name, result|
 		if(result == "same")
-			$result[name] = "<td style='color:green'>#{result}</td>"
+			$result_13[name] = "<td style='color:green'>#{result}</td>"
 		else
-			$result[name] = "<td style='color:red'>#{result}</td>"
+			$result_13[name] = "<td style='color:red'>#{result}</td>"
+		end
+	end
+	
+	$result_173.each do |name, result|
+		if(result == "same")
+			$result_173[name] = "<td style='color:green'>#{result}</td>"
+		else
+			$result_173[name] = "<td style='color:red'>#{result}</td>"
 		end
 	end
 	html = <<html_end
@@ -377,29 +400,72 @@ def send_loan_file_result
 				<tr>
 					<td>Report</td>
 					<td>WEB13</td>
+					<td>WEB173</td>
 				</tr>
 				<tr>
 					<td>CPR Yield Table</td>
-					#{$result["cpr"]}
+					#{$result_13["cpr"]}
+					#{$result_173["cpr"]}
 				</tr>
 				<tr>
 					<td>Decrement Cash Flow</td>
-					#{$result["dcf"]}
+					#{$result_13["dcf"]}
+					#{$result_173["dcf"]}
 				</tr>
 				<tr>
 					<td>Residential Mortgage Profitability Analysis</td>
-					#{$result["rmpa"]}
+					#{$result_13["rmpa"]}
+					#{$result_173["rmpa"]}
 				</tr>
 				<tr>
 					<td>Analysis Table</td>
-					#{$result["at"]}
+					#{$result_13["at"]}
+					#{$result_173["at"]}
 				</tr>
 			</table>
-			<a href='file:///\\192.168.0.17\\thc\\report.html'>report.html</a>
+			<a href='file:///\\192.168.0.17\\thc\\features'>report.html</a>
 		</body>
 	</html>
 html_end
-	send_email('QA@thc.net.cn', 'only for test', html)
+	send_email('jsliu@thc.net.cn', 'only for test', html)
+end
+=begin
+**************************************************************************************
+	DefName: save_loan_file_result_to_excel
+	Description: save loan file result to excel
+	ParameterList: 
+	Return:
+
+	Author: LiuJingsen
+	CreatedDate: 2012-02-22
+**************************************************************************************
+	History: Date                Changer      			Reason
+          2012-02-22          LiuJingsen          create 
+**************************************************************************************
+=end
+def save_loan_file_result_to_excel
+	excel = open_excel("D:\\thc\\lib\\report\\TestResult.xls", "Sheet1")
+	excel.activate
+	case ENV['WEBSITE']
+		when /13/ then
+			excel.cells(2, 2).value = $result_13['cpr']
+			excel.cells(3, 2).value = $result_13['dcf']
+			excel.cells(4, 2).value = $result_13['rmpa']
+			excel.cells(5, 2).value = $result_13['at']
+		when /173/ then
+			excel.cells(2, 3).value = $result_173['cpr']
+			excel.cells(3, 3).value = $result_173['dcf']
+			excel.cells(4, 3).value = $result_173['rmpa']
+			excel.cells(5, 3).value = $result_173['at']
+		else
+			excel.cells(2, 4).value = $result_thc['cpr']
+			excel.cells(3, 4).value = $result_thc['dcf']
+			excel.cells(4, 4).value = $result_thc['rmpa']
+			excel.cells(5, 4).value = $result_thc['at']
+	end
+	excel.saveas "D:\\thc\\lib\\report\\TestResult.xls"
+	
+	close_excel
 end
 
 
