@@ -31,7 +31,6 @@ Then /^the repot will displayed on the report table$/ do
 end
 
 Then /^check the loanfile progress and download the report$/ do
-	#pre = Time.now.to_i
 	pre = Time.now.strftime("%Y-%m-%d %H-%M")
 	hash_filepath = {
 		'cpr' => "D:\\thc\\lib\\report\\#{pre}_cpr.xls",

@@ -374,6 +374,7 @@ end
 **************************************************************************************
 	History: Date                Changer      			Reason
           2012-01-19          LiuJingsen          create 
+					2012-02-23          LiuJingsen					add function:get data from excel
 **************************************************************************************
 =end
 def send_loan_file_result
@@ -397,6 +398,19 @@ def send_loan_file_result
 	
 	excel = open_excel("D:\\thc\\lib\\report\\TestResult.xls", "Sheet1")
 	excel.activate
+	
+	results = []
+	2.upto(5) do |row|
+		2.upto(3) do |column|
+			cell_value = excel.cells(row, column).value
+			if(cell_value == "same")
+				cell_value = "<td style='color:green'>#{cell_value}</td>"
+			else
+				cell_value = "<td style='color:red'>#{cell_value}</td>"
+			end
+			results << cell_value
+		end
+	end
 	
 	web13_cpr = excel.cells(2, 2).value
 	web13_dcf = excel.cells(3, 2).value
@@ -425,23 +439,23 @@ def send_loan_file_result
 				</tr>
 				<tr>
 					<td>CPR Yield Table</td>
-					<td>#{web13_cpr}</td>
-					<td>#{web173_cpr}</td>
+					#{results[0]}
+					#{results[1]}
 				</tr>
 				<tr>
 					<td>Decrement Cash Flow</td>
-					<td>#{web13_dcf}</td>
-					<td>#{web173_dcf}</td>
+					#{results[2]}
+					#{results[3]}
 				</tr>
 				<tr>
 					<td>Residential Mortgage Profitability Analysis</td>
-					<td>#{web13_rmpa}</td>
-					<td>#{web173_rmpa}</td>
+					#{results[4]}
+					#{results[5]}
 				</tr>
 				<tr>
 					<td>Analysis Table</td>
-					<td>#{web13_at}</td>
-					<td>#{web173_at}</td>
+					#{results[6]}
+					#{results[7]}
 				</tr>
 			</table>
 			<a href='file:///\\192.168.0.17\\thc'>click here to view report</a>
