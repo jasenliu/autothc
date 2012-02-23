@@ -458,7 +458,7 @@ def send_loan_file_result
 					#{results[7]}
 				</tr>
 			</table>
-			<a href='file:///\\192.168.0.17\\thc'>click here to view report</a>
+			<a href='file:///\\192.168.0.167\\thc'>click here to view report</a>
 		</body>
 	</html>
 html_end
