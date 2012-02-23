@@ -377,6 +377,7 @@ end
 **************************************************************************************
 =end
 def send_loan_file_result
+=begin
 	$result_13.each do |name, result|
 		if(result == "same")
 			$result_13[name] = "<td style='color:green'>#{result}</td>"
@@ -392,6 +393,26 @@ def send_loan_file_result
 			$result_173[name] = "<td style='color:red'>#{result}</td>"
 		end
 	end
+=end
+	
+	excel = open_excel("D:\\thc\\lib\\report\\TestResult.xls", "Sheet1")
+	excel.activate
+	
+	web13_cpr = excel.cells(2, 2).value
+	web13_dcf = excel.cells(3, 2).value
+	web13_rmpa = excel.cells(4, 2).value
+	web13_at = excel.cells(5, 2).value
+	
+	web173_cpr = excel.cells(2, 3).value
+	web173_dcf = excel.cells(3, 3).value
+	web173_rmpa = excel.cells(4, 3).value
+	web173_at = excel.cells(5, 3).value
+	
+	webthc_cpr = excel.cells(2, 4).value
+	webthc_dcf = excel.cells(3, 4).value
+	webthc_rmpa = excel.cells(4, 4).value
+	webthc_at = excel.cells(5, 4).value
+	
 	html = <<html_end
 	<html>
 		<body>
@@ -404,30 +425,31 @@ def send_loan_file_result
 				</tr>
 				<tr>
 					<td>CPR Yield Table</td>
-					#{$result_13["cpr"]}
-					#{$result_173["cpr"]}
+					<td>#{web13_cpr}</td>
+					<td>#{web173_cpr}</td>
 				</tr>
 				<tr>
 					<td>Decrement Cash Flow</td>
-					#{$result_13["dcf"]}
-					#{$result_173["dcf"]}
+					<td>#{web13_dcf}</td>
+					<td>#{web173_dcf}</td>
 				</tr>
 				<tr>
 					<td>Residential Mortgage Profitability Analysis</td>
-					#{$result_13["rmpa"]}
-					#{$result_173["rmpa"]}
+					<td>#{web13_rmpa}</td>
+					<td>#{web173_rmpa}</td>
 				</tr>
 				<tr>
 					<td>Analysis Table</td>
-					#{$result_13["at"]}
-					#{$result_173["at"]}
+					<td>#{web13_at}</td>
+					<td>#{web173_at}</td>
 				</tr>
 			</table>
-			<a href='file:///\\192.168.0.17\\thc\\features'>report.html</a>
+			<a href='file:///\\192.168.0.17\\thc'>click here to view report</a>
 		</body>
 	</html>
 html_end
-	send_email('jsliu@thc.net.cn', 'only for test', html)
+	close_excel
+	send_email('QA@thc.net.cn', 'only for test', html)
 end
 =begin
 **************************************************************************************

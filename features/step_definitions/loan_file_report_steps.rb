@@ -62,12 +62,6 @@ end
 
 Given /^send the loan file result$/ do
 	save_loan_file_result_to_excel
-	puts "env: " + ENV['WEBSITE']
-	puts ENV['WEBSITE'].include?('173')
-	puts "result_13:"
-	p $result_13
-	puts "result_173:"
-  p $result_173
 	if(ENV['WEBSITE'].include?('173'))
 		send_loan_file_result
 	end
