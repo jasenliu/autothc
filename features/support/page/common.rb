@@ -51,6 +51,9 @@ def close_ie_process
     if process.name =="iexplore.exe" then       
        process.terminate
     end
+		if process.name =="IEXPLORE.EXE" then       
+       process.terminate
+    end
   end
 end
 =begin
