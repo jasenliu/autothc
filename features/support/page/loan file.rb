@@ -463,7 +463,7 @@ def send_loan_file_result
 	</html>
 html_end
 	close_excel
-	send_email('QA@thc.net.cn', 'only for test', html)
+	send_email('QA@thc.net.cn', 'loan file compare', html)
 end
 =begin
 **************************************************************************************
