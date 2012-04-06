@@ -1338,6 +1338,11 @@ task :get_latest_webservice do
 	sh "svn checkout https://192.168.0.6:8443/svn/Repo/THC/C0702/W-Series/WebService C:/THC/C0702/W-Series/WebService"
 end
 #================================CopyToProducts config=============================================
+desc "build CopyToProducts project ..."
+task :copy_to_products => [:dll, :r0702, :trds, :rssv1, :tnetsvr1, :tmqsvr1, :irrsvc1, :updsvc1, :w0702] do
+	puts "copy to products finished"
+end
+
 release_path = "C:/THC/C0702/ReleaseFiles/"
 task :dll do
 	release_dlls = "craxddrt.dll,craxdrt.dll,crviewer.dll,espedcf.esp,cmosub32.dll,espmodel.dll,adppmdl.dll,flexcell.ocx,log4cxx.dll,jmail.dll,msinet.ocx,unins.exe,TRDSLicense.dll,prepayscore.dll,stsvc.exe,pathfilerules.xml,pathfileheads.xml,pathfile.xla,ConnStringEditorC0702.exe,IRRSvcMonitor.exe,cmo_w32.dll,tzip.dll,trdscrypto.dll,tcnpool.dll,tlogging.dll,tmisc.dll,trdsdata.dll,terrhandler.dll,tmd.dll,taset.dll,tdcalc.dll,tsecurity.dll,trefentity.dll,texchangeratemgr.dll,tstock.dll,toption.dll,tots.dll,tbond.dll,tird.dll,tcyd.dll,tintexcmo.dll,tmarkit.dll,tstruprod.dll,tcdo.dll,toptionderiv.dll,tdbload.dll,tmongodb.dll,tportfolio.dll,ttask.dll,tpathfileanalyzer.dll,tpathfileparser.dll,tcalc.dll,tpo.dll,trdsirrcalc.dll,trdscall.dll,tuserrole.dll,irrcalc.dll,thcglview.dll,tfiledb.dll,tnetcmd.dll,tactivemq.dll,tclientshell.dll,tanalysis.dll,tbusiness.dll,tnetinfo.dll,spda.dll,tcamel.dll,tgroupcalcitemstr.dll,tetldata.dll,oascalibrating.dll"
@@ -1453,21 +1458,25 @@ task :w0702 do
 	sh "xcopy C:\\THC\\C0702\\W-Series\\WebService\\bin\\*.dll #{product_W0702_path}\\bin\\ /H /R /Y"
 end
 
-
-def copy_to_produc(src_path, dest_path, file)
-	if(File.exists?(src_path))
-		if(File.exists?(dest_path))
-			if(File.mtime(src_path) != File.mtime(dest_path))
-				copy_files(src_path, dest_path)
-			end
-		else
-			copy_files(src_path, dest_path)
-		end
-	else
-		puts "file #{file} not found!"
-	end
+#================================CopyToPcnest======================================================
+desc "copy products file to pcnest"
+task :pcnest do
+	pcnest_path = "\\\\192.168.0.167\\thc\\Back20070704\\FileList\\WebDev"
+	src_path = "C:\\THC\\C0702\\Products"
+	
+	#copy_files("C:\\THC\\C0702\\Products\\R0702\\rptsvc.exe", "\\\\192.168.0.167\\thc\\Back20070704\\FileList\\WebDev\\")
+	
+	sh "xcopy #{src_path}\\Dll\\*.* #{pcnest_path}\\dll\\ /H /R /Y /E"
+	sh "xcopy #{src_path}\\IRRSvc\\*.* #{pcnest_path}\\IRRSvc\\ /H /R /Y /E"
+	sh "xcopy #{src_path}\\R0702\\*.* #{pcnest_path}\\R0702\\ /H /R /Y /E"
+	sh "xcopy #{src_path}\\RSSV\\*.* #{pcnest_path}\\RSSV\\ /H /R /Y /E"
+	sh "xcopy #{src_path}\\TMQSvr\\*.* #{pcnest_path}\\TMQSvr\\ /H /R /Y /E"
+	sh "xcopy #{src_path}\\TNetSvr\\*.* #{pcnest_path}\\TNetSvr\\plugins\\ /H /R /Y /E"
+	sh "xcopy #{src_path}\\TNetSvr\\plugins\\*.* #{pcnest_path}\\TNetSvr\\\\plugins\\ /H /R /Y /E"
+	sh "xcopy #{src_path}\\TRDS\\*.* #{pcnest_path}\\TRDS\\ /H /R /Y /E"
+	sh "xcopy #{src_path}\\UpdSvc\\*.* #{pcnest_path}\\UpdSvc\\ /H /R /Y /E"
+	sh "xcopy #{src_path}\\W0702 #{pcnest_path}\\W0702\\ /H /R /Y /E"
 end
-
 
 #================================buildFiles_With_cmo322 config=====================================
 desc "build buildFiles_With_cmo322 project ..."
@@ -1615,4 +1624,18 @@ def is_lib_ms6_up_to_date
 	lib_ms6_time = File.mtime('C:/THC/lib/ThcLib-vc6-mt-s-0_3_8.libMs6')
 	lib_intel_time = File.mtime('C:/THC/lib/ThcLib-vc6-mt-s-0_3_8.libIntel')
 	lib_ms6_time >= lib_intel_time ? true : false
+end
+
+def copy_to_produc(src_path, dest_path, file)
+	if(File.exists?(src_path))
+		if(File.exists?(dest_path))
+			if(File.mtime(src_path) != File.mtime(dest_path))
+				copy_files(src_path, dest_path)
+			end
+		else
+			copy_files(src_path, dest_path)
+		end
+	else
+		puts "file #{file} not found!"
+	end
 end
