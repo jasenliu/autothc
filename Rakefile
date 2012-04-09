@@ -11,7 +11,24 @@ module Kernel
     $stdout = STDOUT
   end
 end
-#================================ThcLib config=====================================
+#================================Default config=====================================
+#bak = :increaseversion,:updateversion,
+task :default => [:thclib,:tzip,:trdscrypto,:tcnpool,:tlogging,:tmisc,:trdsdata,:terrhandler,:tmd,:taset,:tdcalc,:tsecurity,:trefentity,:texchangeratemgr,:tstock,:toption,:tots,:tbond,:tird,:tcyd,:tintexcmo,:tmarkit,:tstruprod,:tcdo,:toptionderiv,:tdbload,:intexcmoclient,:tmongodb,:tportfolio,:ttask,:tpathfileanalyzer,:tpathfileparser,:tcalc,:tpo,:oascalibrating,:trdsirrcalc,:trdscall,:tuserrole,:irrcalc,:collectots,:irrsvc,:thcglview,:reverseengineering,:tfiledb,:tnetcmd_all,:tclientshell,:tbusiness,:tanalysis,:tclient,:crystalreportcom,:crystalreportclient,:createreport,:reportsvc,:updfunc,:updsvc,:tpl_xxx,:tcamel,:spda,:tnetinfo,:systest,:rssv,:tsvc4eseries,:copy_to_products,:copy_to_pcnest,:clientsetuppackage,:irrsvcsetuppackage,:buildFiles_With_cmo322] do
+	puts "daily build finished"
+end
+
+#================================IncreaseVersion config=====================================
+task :increaseversion do
+	sh "attrib -R C:/THC/C0702/TCom2/contrib/VersionNo.h"
+	copy_files('C:/THC/C0702/TCom2/contrib/VersionNo.h', 'C:/THC/C0702/BuildScript/VersionNo.h')
+	sh "C:/THC/C0702/BuildScript/VersionEditor.exe true C:/THC/C0702/TCom2/contrib/VersionNo.h"
+end
+
+#================================UpdateVersion config==========================================
+task :updateversion do
+	sh "svn commit C:/THC/C0702/TCom2/contrib/VersionNo.h -m \"update C0702 version control file\""
+end
+#================================ThcLib config=================================================
 desc "build thclib project ..."
 task :thclib => [:get_latest_thclib, :setintel] do
 	puts "delete the old file ThcLib-vc6-mt-s-0_3_8.lib ..."
@@ -1157,6 +1174,35 @@ task :get_latest_tgroupCalcItemStr do
 	sh "svn checkout https://192.168.0.6:8443/svn/Repo/THC/C0702/TCom2/TGroupCalcItemStr C:/THC/C0702/TCom2/TGroupCalcItemStr"
 end
 
+#================================Tcamel config=======================================
+desc "build Tcamel project ..."
+task :tcamel => [:get_latest_tcamel] do
+	sh "VB6.exe /make C:/THC/C0702/TCom2/TCamel/TCamel.vbp /outdir C:/THC/C0702/out/"
+	puts "copy TCamel.dll to release files folder"
+	copy_files('C:/THC/C0702/out/TCamel.dll', 'C:/THC/C0702/ReleaseFiles/TCamel.dll')
+end
+
+desc "get latest tcamel version from svn ..."
+task :get_latest_tcamel do
+	sh "svn revert -R C:/THC/C0702/TCom2/TCamel"
+	sh "svn checkout https://192.168.0.6:8443/svn/Repo/THC/C0702/TCom2/TCamel C:/THC/C0702/TCom2/TCamel"
+end
+
+#=================================SPDA config=========================================
+desc "build SPDA project ..."
+task :spda => [:get_latest_spda] do
+	#puts "delete the old file SPDA.dll"
+	#delete_file('C:/THC/C0702/out/SPDA.dll')
+	sh "msdev.exe C:/THC/C0702/Misc/SPDA/SPDA.dsp /make \"SPDA - Win32 Release\" /Rebuild"
+	puts "copy SPDA.dll to release files folder"
+	copy_files('C:/THC/C0702/out/SPDA.dll', 'C:/THC/C0702/ReleaseFiles/SPDA.dll')
+end
+
+desc "get latest spda version from svn ..."
+task :get_latest_spda do
+	sh "svn revert -R C:/THC/C0702/Misc/SPDA"
+	sh "svn checkout https://192.168.0.6:8443/svn/Repo/THC/C0702/Misc/SPDA C:/THC/C0702/Misc/SPDA"
+end
 #================================TNetInfo config=====================================
 desc "build TNetInfo project ..."
 task :tnetinfo => [:get_latest_tnetinfo, :resetvs6] do
@@ -1171,6 +1217,17 @@ desc "get latest tnetinfo version from svn ..."
 task :get_latest_tnetinfo do
 	sh "svn revert -R C:/THC/C0702/TRDSUpd/TNetInfo"
 	sh "svn checkout https://192.168.0.6:8443/svn/Repo/THC/C0702/TRDSUpd/TNetInfo C:/THC/C0702/TRDSUpd/TNetInfo"
+end
+
+#================================SysTest config=====================================
+task :systest => [:get_latest_systest] do
+	sh "VB6.exe /make C:/THC/C0702/Misc/ThcSysTest/ThcSysTest.vbp /out C:/THC/C0702/BuildScript/buildLog/buildThcSysTest.log /outdir C:/THC/C0702/ReleaseFiles"
+end
+
+desc "get latest systest version from svn ..."
+task :get_latest_systest do
+	sh "svn revert -R C:/THC/C0702/Misc/ThcSysTest"
+	sh "svn checkout https://192.168.0.6:8443/svn/Repo/THC/C0702/Misc/ThcSysTest C:/THC/C0702/Misc/ThcSysTest"
 end
 
 #================================ClientSetupPackage config=====================================
@@ -1460,7 +1517,7 @@ end
 
 #================================CopyToPcnest======================================================
 desc "copy products file to pcnest"
-task :pcnest do
+task :copy_to_pcnest do
 	pcnest_path = "\\\\192.168.0.167\\thc\\Back20070704\\FileList\\WebDev"
 	src_path = "C:\\THC\\C0702\\Products"
 	
