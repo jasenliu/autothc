@@ -3,7 +3,7 @@ class SqlServer
   attr_accessor :connection, :data, :fields
 	attr_writer :username, :password
 
-  def initialize(host, username = 'sa', password='56015652')
+  def initialize(host, username = 'sa', password='thcdm021*')
     @connection = nil
     @data = nil
 	  @host = host

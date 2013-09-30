@@ -172,7 +172,7 @@ def check_loan_file_progress(hash_filepath)
 				end
 		end
 	end
-	close_ie_process
+	#close_ie_process
 end
 =begin
 **************************************************************************************
@@ -195,7 +195,7 @@ def download_loan_file_report(file_path, div_index)
 	until flag
 		num += 1
 		begin
-			@browser.frame(:name, 'content').div(:id, 'loanFileList').div(:index, 0).div(:class, 'report').div(:index, 0).div(:index, div_index).link(:href, /EX_XLS/).left_click
+			@browser.frame(:name, 'content').div(:id, 'loanFileList').div(:index, 0).div(:class, 'report').div(:index, 0).div(:index, div_index).link(:href, /EX_XLS/).click_no_wait
 			flag = true
 			rescue => e
 				#puts e
@@ -230,9 +230,9 @@ def compare_loan_file_report
 		if(File.exists?(file_path))
 			#puts "compare #{report_name} loan file report..."
 			stand_excel_path = case report_name
-				when "cpr" then "D:\\thc\\lib\\report\\std report\\cpr_std.xls"
-				when "dcf" then "D:\\thc\\lib\\report\\std report\\dcf_std.xls"
-				else "D:\\thc\\lib\\report\\std report\\rmpa_std.xls"
+				when "cpr" then "D:\\AutoThc\\lib\\report\\std report\\cpr_std.xls"
+				when "dcf" then "D:\\AutoThc\\lib\\report\\std report\\dcf_std.xls"
+				else "D:\\AutoThc\\lib\\report\\std report\\rmpa_std.xls"
 			end
 			#puts "name:" + report_name
 			compare_excel_sheet(file_path, stand_excel_path, "Sheet1", report_name)
@@ -396,7 +396,7 @@ def send_loan_file_result
 	end
 =end
 	
-	excel = open_excel("D:\\thc\\lib\\report\\TestResult.xls", "Sheet1")
+	excel = open_excel("D:\\AutoThc\\lib\\report\\TestResult.xls", "Sheet1")
 	excel.activate
 	
 	results = []
@@ -458,12 +458,12 @@ def send_loan_file_result
 					#{results[7]}
 				</tr>
 			</table>
-			<a href='file:///\\192.168.0.167\\thc'>click here to view report</a>
+			<a href='file:///\\192.168.0.21\\AutoThc'>click here to view report</a>
 		</body>
 	</html>
 html_end
 	close_excel
-	send_email('QA@thc.net.cn', 'loan file compare', html)
+	send_email('jsliu@thc.net.cn', 'loan file compare', html)
 end
 =begin
 **************************************************************************************
@@ -480,7 +480,7 @@ end
 **************************************************************************************
 =end
 def save_loan_file_result_to_excel
-	excel = open_excel("D:\\thc\\lib\\report\\TestResult.xls", "Sheet1")
+	excel = open_excel("D:\\AutoThc\\lib\\report\\TestResult.xls", "Sheet1")
 	excel.activate
 	case ENV['WEBSITE']
 		when /13/ then
@@ -499,7 +499,7 @@ def save_loan_file_result_to_excel
 			excel.cells(4, 4).value = $result_thc['rmpa']
 			excel.cells(5, 4).value = $result_thc['at']
 	end
-	excel.saveas "D:\\thc\\lib\\report\\TestResult.xls"
+	excel.saveas "D:\\AutoThc\\lib\\report\\TestResult.xls"
 	
 	close_excel
 end

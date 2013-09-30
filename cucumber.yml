@@ -1,5 +1,7 @@
 #default: --format html --out report.html --format pretty
+#default: --profile html_report
+#html_report: --format progress --format html --out=features_report.html
 #default: --profile html_report --profile web173 --profile web13
 #html_report: --format html --out report.html --format pretty
-web173: --format html --out web173_report.html --format pretty
-web13: --format html --out web13_report.html --format pretty
+#web173: --format html --out web173_report.html --format pretty
+#web13: --format html --out web13_report.html --format pretty

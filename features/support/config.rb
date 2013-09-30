@@ -8,6 +8,10 @@ DB173HOST = '192.168.0.71'
 DB173USER = 'sa'
 DB173PASSWORD = 'sa'
 
+GENERATE_REPORT_PATH = 'D:/AutoThc/lib/report/generate_report/'
+STANDARD_REPORT_PATH = 'D:/AutoThc/lib/report/std report/'
+RESULT_REPORT_PATH = 'D:/AutoThc/lib/test result/'
+
 PRICING_DATE = '1/10/2012'
 
 $result_13 = {}

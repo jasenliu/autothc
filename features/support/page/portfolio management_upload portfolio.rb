@@ -28,7 +28,20 @@ end
 **************************************************************************************
 =end
 def select_portfolio_file_format(radio_id)
-	@browser.frame(:name, "content").frame(:name, "frame_uploadportfolio").radio(:id, radio_id).set
+  flag = false
+  num = 0
+  until flag
+    num += 1
+    begin
+      @browser.frame(:name, "content").frame(:name, "frame_uploadportfolio").radio(:id, radio_id).set
+      flag = true
+    rescue => e
+      puts e.message
+      flag = false
+    ensure
+      flag = true if num > 30
+    end
+  end
 end
 =begin
 **************************************************************************************
@@ -44,7 +57,8 @@ end
 **************************************************************************************
 =end
 def click_upload_portfolio_button
-	@browser.frame(:name, "content").frame(:name, "frame_uploadportfolio").button(:id, "submit1").left_click
+	#@browser.frame(:name, "content").frame(:name, "frame_uploadportfolio").button(:id, "submit1").left_click
+	@browser.frame(:name, "content").frame(:name, "frame_uploadportfolio").button(:id, "submit1").click
 end
 =begin
 **************************************************************************************

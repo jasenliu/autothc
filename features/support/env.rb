@@ -7,11 +7,14 @@ require 'singleton'
 require 'fileutils'
 require 'net/smtp'
 require 'mailfactory'
+require 'erb'
 #require File.dirname(__FILE__) + '\page\common.rb'
-Browser = Watir::IE
+Browser = Watir::Browser
 #Browser = Watir::Browser :IE
 
+$DEBUG = false 
 Before do
+	init_folder("d:/AutoThc")
 	clear_cookie
 	@browser = Browser.new
 	@browser.wait

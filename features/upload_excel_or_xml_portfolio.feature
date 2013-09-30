@@ -2,7 +2,7 @@ Feature: Upload excel or xml format portfolio
 	In order to upload excel or xml format portfolio
 	As a user
 	I want to make sure this function is well
-	
+		
 	Scenario: Upload excel format portfolio correctly
 		Given login the website with 'auto/1' info 
 		 When click 'Portfolio Management' link in the menu pane
@@ -14,7 +14,7 @@ Feature: Upload excel or xml format portfolio
 		  And click the upload portfolio button
 		 Then uploaded file 'excel_format' will display on the first line of portfolio manager
 	
-	@test	 
+	@test 
 	Scenario: do not select the data file
 		Given login the website with 'auto/1' info 
 		 When click 'Portfolio Management' link in the menu pane

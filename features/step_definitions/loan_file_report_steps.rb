@@ -33,14 +33,14 @@ end
 Then /^check the loanfile progress and download the report$/ do
 	pre = Time.now.strftime("%Y-%m-%d %H-%M")
 	hash_filepath = {
-		'cpr' => "D:\\thc\\lib\\report\\#{pre}_cpr.xls",
-		'dcf' => "D:\\thc\\lib\\report\\#{pre}_dcf.xls",
-		'rmpa' => "D:\\thc\\lib\\report\\#{pre}_rmpa.xls"
+		'cpr' => "D:\\AutoThc\\lib\\report\\#{pre}_cpr.xls",
+		'dcf' => "D:\\AutoThc\\lib\\report\\#{pre}_dcf.xls",
+		'rmpa' => "D:\\AutoThc\\lib\\report\\#{pre}_rmpa.xls"
 	}
 	$compare_filepath = {
-		'cpr' => "D:\\thc\\lib\\report\\#{pre}_cpr.xls",
-		'dcf' => "D:\\thc\\lib\\report\\#{pre}_dcf.xls",
-		'rmpa' => "D:\\thc\\lib\\report\\#{pre}_rmpa.xls"
+		'cpr' => "D:\\AutoThc\\lib\\report\\#{pre}_cpr.xls",
+		'dcf' => "D:\\AutoThc\\lib\\report\\#{pre}_dcf.xls",
+		'rmpa' => "D:\\AutoThc\\lib\\report\\#{pre}_rmpa.xls"
 	}
 	#puts "$compare_filepath:"
 	#puts $compare_filepath
@@ -61,7 +61,7 @@ end
 
 Given /^send the loan file result$/ do
 	save_loan_file_result_to_excel
-	if(ENV['WEBSITE'].include?('173'))
+	#if(ENV['WEBSITE'].include?('173'))
 		send_loan_file_result
-	end
+	#end
 end

@@ -140,3 +140,84 @@ def compare_excel_sheet(generate_excel_path, stand_excel_path, sheet_name, repor
 	
 	close_excel
 end
+
+def get_excel_sheet_count(file_path)
+  excel = WIN32OLE::new('excel.Application')
+	excel.displayalerts = false
+	excel.visible = false
+	excel_file = excel.workbooks.open(file_path)
+	sheet_count = excel_file.worksheets.count
+  close_excel
+  return sheet_count
+end
+
+def compare_common_sheet(generate_excel_path, stand_excel_path, sheet_name, report_name)
+	diff_flag = false
+	
+	generate_excel_sheet = open_excel(generate_excel_path, sheet_name)
+	generate_excel_sheet.activate
+	generate_row_count = generate_excel_sheet.UsedRange.rows.count
+	generate_column_count = generate_excel_sheet.UsedRange.columns.count
+	
+	#puts "generate_row_count:" + generate_row_count.to_s
+	#puts "generate_column_count:" + generate_column_count.to_s
+	
+	stand_excel_sheet = open_excel(stand_excel_path, sheet_name)
+	stand_excel_sheet.activate
+	stand_row_count = stand_excel_sheet.UsedRange.rows.count
+	stand_columu_count = stand_excel_sheet.UsedRange.columns.count
+	
+	#puts "stand_row_count:" + stand_row_count.to_s
+	#puts "stand_columu_count:" + stand_columu_count.to_s
+	
+	if(generate_row_count != stand_row_count || generate_column_count != stand_columu_count)
+		diff_flag = true
+		excel_name = File.basename(generate_excel_path) 
+		msg = "Excel sheet #{excel_name} used ranges are not equal"
+	else
+		1.upto(generate_row_count) do |row|
+			1.upto(generate_column_count) do |column|
+				tem_generate = generate_excel_sheet.cells(row, column).value.to_s
+				tem_stand = stand_excel_sheet.cells(row, column).value.to_s
+				if((tem_generate != tem_stand) && ((tem_generate.to_i - tem_stand.to_i).abs > 0.00001))
+					diff_flag = true
+					msg = "#{report_name} Cell(#{row}, #{column}) values are different: expected_value=#{tem_stand}, actual_value=#{tem_generate}"
+					puts msg
+					generate_excel_sheet.cells(row, column).value = "Expected:#{tem_stand},Actual:#{tem_generate}"
+					generate_excel_sheet.cells(row, column).Font.ColorIndex = 7
+					puts "update generate report"
+				end
+			end
+		end
+	end
+
+  report_arr = report_name.split('_')
+  report_arr.delete_at(3)
+  report_name = report_arr.join('_')
+	if(diff_flag)
+		diff_name = File.basename(generate_excel_path, ".xls") + "_" + sheet_name + "_diff.xls"
+		diff_path = File.dirname(generate_excel_path) + "/" + diff_name
+    diff_path = diff_path.gsub(/\//, "\\\\")
+		generate_excel_sheet.saveas(diff_path)
+    $result_13.store(report_name, "diff")
+	else
+    $result_13.store(report_name, "same")
+	end
+	
+	close_excel
+end
+
+def get_sheet_names(file_path)
+  arr_sheet = []
+  excel = WIN32OLE::new('excel.Application')
+	excel.displayalerts = false
+	excel.visible = false
+	excel_file = excel.workbooks.open(file_path)
+  sheet_count = excel.workbooks.count
+  for i in 1..sheet_count
+    sheet_name = excel.worksheets(i).name
+    arr_sheet << sheet_name
+  end
+  close_excel
+  return arr_sheet
+end
