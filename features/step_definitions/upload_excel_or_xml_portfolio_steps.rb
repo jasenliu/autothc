@@ -1,6 +1,6 @@
 Given /^login the website with '(.*)\/(.*)' info$/ do |username, passowrd|
 	#login(username, passowrd, ENV['WEBSITE'])
-	login(username, passowrd, WEB13_URL)
+	login(username, passowrd, WEB173_URL)
 end
 
 When /^click '(.*)' link in the menu pane$/ do |page_name|

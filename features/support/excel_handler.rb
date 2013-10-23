@@ -196,7 +196,8 @@ def compare_common_sheet(generate_excel_path, stand_excel_path, sheet_name, repo
   report_name = report_arr.join('_')
 	if(diff_flag)
 		diff_name = File.basename(generate_excel_path, ".xls") + "_" + sheet_name + "_diff.xls"
-		diff_path = File.dirname(generate_excel_path) + "/" + diff_name
+		#diff_path = File.dirname(generate_excel_path) + "/" + diff_name
+		diff_path = RESULT_REPORT_PATH + "#{Time.now.strftime('%Y%m%d')}" + "/" + diff_name
     diff_path = diff_path.gsub(/\//, "\\\\")
 		generate_excel_sheet.saveas(diff_path)
     $result_13.store(report_name, "diff")
